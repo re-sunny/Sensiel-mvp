@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenciel AI Brand-Ops Walkthrough</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 10% 10%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 30%, var(--primary-light) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .menu-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .menu-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-btn.active,
+        .menu-btn:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.25);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .screen-section {
+            display: none;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .screen-section.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HTML/CSS MOCKUP AREA */
+        .mockup-container {
+            background: #020617;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+        }
+
+        .dot-red {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .dot-yellow {
+            width: 10px;
+            height: 10px;
+            background: #eab308;
+            border-radius: 50%;
+        }
+
+        .dot-green {
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        .mockup-title {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* OVERVIEW MOCKUP */
+        .ov-node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .ov-node {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .ov-node.active {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        }
+
+        .ov-num {
+            width: 25px;
+            height: 25px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .ov-body h4 {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .ov-body p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* STEP 1 MOCKUP */
+        .s1-input-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+            font-size: 0.75rem;
+            color: var(--primary-light);
+        }
+
+        .s1-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .s1-tag {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary-light);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 4px;
+        }
+
+        .s1-card-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .s1-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.6rem;
+            border-radius: 6px;
+        }
+
+        .s1-card h5 {
+            font-size: 0.78rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .s1-card p {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+        }
+
+        /* STEP 2 MOCKUP */
+        .s2-split {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 0.8rem;
+            height: 100%;
+        }
+
+        .s2-cell {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.6rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .s2-pain-badge {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-rose);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 0.2rem;
+            font-size: 0.62rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .s2-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.6rem;
+        }
+
+        .s2-bar {
+            flex-grow: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .s2-bar-fill {
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .s2-sp-card {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .s2-sp-card:hover {
+            border-color: var(--accent-emerald);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* STEP 3 MOCKUP */
+        .s3-preview {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 0.8rem;
+        }
+
+        .s3-phone {
+            border: 3px solid #334155;
+            border-radius: 20px;
+            padding: 0.5rem;
+            background: #020617;
+            text-align: center;
+        }
+
+        .s3-phone-screen {
+            background: #0f172a;
+            border-radius: 12px;
+            height: 250px;
+            padding: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .s3-slide-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .s3-slide-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.68rem;
+        }
+
+        .s3-slide-item.active {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.06);
+        }
+
+        /* DESCRIPTION PANEL AREA */
+        .desc-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .desc-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .step-tag {
+            color: var(--primary-light);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .desc-panel h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .desc-panel p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-bullets li {
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .feature-bullets li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-emerald);
+            font-weight: 700;
+        }
+
+        .tech-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .tech-box h6 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .back-btn-container {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .btn-dash {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 2rem;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-dash:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .screen-section {
+                grid-template-columns: 1fr;
+            }
+
+            .mockup-container {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Cenciel AI Brand-Ops Walkthrough</h1>
+            <p>센시엘 전용 AI 마케팅 파이프라인 OS의 화면별 상세 매뉴얼과 작동 로직 가이드</p>
+        </header>
+
+        <div class="menu-bar">
+            <button class="menu-btn active" onclick="showTab('tab-overview')">대시보드 개요</button>
+            <button class="menu-btn" onclick="showTab('tab-market')">1단계. Market Radar</button>
+            <button class="menu-btn" onclick="showTab('tab-voc')">2단계. VOC Insights</button>
+            <button class="menu-btn" onclick="showTab('tab-generator')">3단계. Copywriter</button>
+        </div>
+
+        <!-- 1. OVERVIEW -->
+        <section id="tab-overview" class="screen-section active">
+            <div class="mockup-container">
+                <div class="mockup-header">
+                    <span class="dot-red"></span>
+                    <span class="dot-yellow"></span>
+                    <span class="dot-green"></span>
+                    <span class="mockup-title">cenciel-ai.com/overview (대시보드 메인)</span>
+                </div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Cenciel AI
+                    Brand-Ops OS</div>
+                <div
+                    style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 1rem; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+                    단 한 번의 입력으로 완성하는 백엔드 마케팅 파이프라인 운영체제</div>
+                <div class="ov-node-list">
+                    <div class="ov-node active">
+                        <div class="ov-num">1</div>
+                        <div class="ov-body">
+                            <h4>경쟁사 트렌드 진단 (Market Radar)</h4>
+                            <p>경쟁 제품 URL 크롤링 및 트렌드 키워드 Top 5와 USP 실시간 요약</p>
+                        </div>
+                    </div>
+                    <div class="ov-node">
+                        <div class="ov-num">2</div>
+                        <div class="ov-body">
+                            <h4>소비자 VOC 분류 분석 (VOC Insights)</h4>
+                            <p>엑셀 파일 파서 처리 및 고객 불편 요소를 이용한 기획 아이디어 처방</p>
+                        </div>
+                    </div>
+                    <div class="ov-node">
+                        <div class="ov-num">3</div>
+                        <div class="ov-body">
+                            <h4>멀티채널 원고 빌더 (Copywriter)</h4>
+                            <p>기획 의도에 맞춰 인스타, 블로그, 숏폼의 맞춤형 카피 빌드</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="desc-panel">
+                <div class="desc-header">
+                    <span class="step-tag">Dashboard</span>
+                    <h2>통합 파이프라인 운영 개요</h2>
+                    <p>Cenciel Brand-Ops에 접속하자마자 노출되는 허브 화면으로, 복잡한 마케팅 프로세스를 3단계 파이프라인으로 연결하여 시각화합니다.</p>
+                    <ul class="feature-bullets">
+                        <li><strong>워크플로우 연계 관리</strong>: 각 단계별 수행 진척도 및 유기적 데이터 흐름 추적</li>
+                        <li><strong>쉬운 접근성</strong>: 각 카드나 링크를 눌러 다이렉트 탭 전환</li>
+                        <li><strong>실시간 연결성</strong>: 내부 API 키를 이용한 연결 상태 배지 배포</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h6>구동 웹 기술 및 API</h6>
+                    <div class="tech-row">
+                        <span class="tech-tag">FastAPI (Starlette)</span>
+                        <span class="tech-tag">HTML5 Router</span>
+                        <span class="tech-tag">CSS Flex/Grid Layout</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MARKET RADAR -->
+        <section id="tab-market" class="screen-section">
+            <div class="mockup-container">
+                <div class="mockup-header">
+                    <span class="dot-red"></span>
+                    <span class="dot-yellow"></span>
+                    <span class="dot-green"></span>
+                    <span class="mockup-title">cenciel-ai.com/market (1단계 마켓 레이더)</span>
+                </div>
+                <div style="font-size:0.8rem; color:#fff; font-weight:700; margin-bottom: 0.5rem;">경쟁사 트렌드 진단 및 레이더
+                </div>
+                <div class="s1-input-box">비비크림 (또는 https://smartstore.naver.com/... 경쟁사 상품 주소)</div>
+                <div
+                    style="background:var(--primary); padding: 0.4rem; font-size:0.75rem; text-align:center; font-weight:600; border-radius: 4px; margin-bottom: 1.25rem;">
+                    시장 레이더 가동하기</div>
+
+                <div style="font-size: 0.72rem; color: #fff; font-weight: 700; margin-bottom: 0.4rem;">✔ 시장 트렌드 키워드 Top
+                    5</div>
+                <div class="s1-tags">
+                    <span class="s1-tag">비비크림 추천</span>
+                    <span class="s1-tag">재생 비비</span>
+                    <span class="s1-tag">커버력 좋은 비비</span>
+                    <span class="s1-tag">톤업 크림</span>
+                    <span class="s1-tag">EWG 그린등급</span>
+                </div>
+
+                <div style="font-size: 0.72rem; color: #fff; font-weight: 700; margin-bottom: 0.4rem;">✔ 경쟁사 핵심 강점(USP)
+                    요약</div>
+                <div class="s1-card-list">
+                    <div class="s1-card">
+                        <h5>피부과 처방 성분</h5>
+                        <p>병풀정량추출물 탑재로 장벽 회복성 시너지 제안</p>
+                    </div>
+                    <div class="s1-card">
+                        <h5>번들거림 프리</h5>
+                        <p>12시간 이상 다크닝 현상을 원천 방지하는 톤 지속력</p>
+                    </div>
+                </div>
+            </div>
+            <div class="desc-panel">
+                <div class="desc-header">
+                    <span class="step-tag">Step 1. Market Radar</span>
+                    <h2>경쟁사 웹 스크랩 &amp; 트렌드 포지셔닝</h2>
+                    <p>입력받은 제품 키워드나 경쟁 쇼핑몰/제품 URL을 백엔드 크롤러가 직접 파싱하여 텍스트 정보를 긁어오며, LLM이 경쟁사의 마케팅 강점(USP)을 분류 제시합니다.</p>
+                    <ul class="feature-bullets">
+                        <li><strong>웹 파서 모듈 연결</strong>: 스마트스토어/쿠팡 등 내부 메타 정보 크롤링</li>
+                        <li><strong>지능적 상위 태그 추출</strong>: LLM이 상품명에서 연계 확장 키워드 도출</li>
+                        <li><strong>차별화 공략 및 제안</strong>: 경쟁사의 약점을 공략하기 위한 마케팅 타겟 제안</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h6>구동 웹 기술 및 API</h6>
+                    <div class="tech-row">
+                        <span class="tech-tag">crawler.py (BeautifulSoup4)</span>
+                        <span class="tech-tag">LLMService.analyze_market</span>
+                        <span class="tech-tag">POST /api/analyze-market</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VOC INSIGHTS -->
+        <section id="tab-voc" class="screen-section">
+            <div class="mockup-container">
+                <div class="mockup-header">
+                    <span class="dot-red"></span>
+                    <span class="dot-yellow"></span>
+                    <span class="dot-green"></span>
+                    <span class="mockup-title">cenciel-ai.com/voc (2단계 피드백 인사이트)</span>
+                </div>
+                <div class="s2-split">
+                    <div class="s2-cell" style="gap: 0.6rem;">
+                        <span style="font-size:0.72rem; font-weight:700; color:#fff;">⚠️ 고객 불만 통지 (Pain Point)</span>
+                        <div class="s2-pain-badge">제형: 세럼 화장 전 밀림 심함 (High Impact)</div>
+                        <div class="s2-pain-badge"
+                            style="background:rgba(234,179,8,0.1); color:#eab308; border-color:rgba(234,179,8,0.3);">용기:
+                            스포이트 투입 튜브 뻑뻑함</div>
+                        <span style="font-size:0.72rem; font-weight:700; color:#fff; margin-top:2px;">💡 AI 추천 핵심 소구점
+                            (클릭 가능)</span>
+                        <div class="s2-sp-card">🎯 "메이크업 전 밀림 없는 가성비 초소량 속보습 톤케어"</div>
+                        <div class="s2-sp-card" style="border-color:rgba(255,255,255,0.06); background:none;">🎯 "여드름성
+                            처방 논코메도제닉 민감피부 안심 보습막"</div>
+                    </div>
+                    <div class="s2-cell">
+                        <span style="font-size:0.65rem; color:var(--text-secondary);">총 리뷰 수: <strong
+                                style="color:#fff;">15개</strong></span>
+                        <span
+                            style="font-size:0.65rem; color:var(--text-secondary); border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">별점별
+                            분포</span>
+                        <div class="s2-bar-row">5★ <div class="s2-bar">
+                                <div class="s2-bar-fill" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="s2-bar-row">4★ <div class="s2-bar">
+                                <div class="s2-bar-fill" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <div class="s2-bar-row">3★ <div class="s2-bar">
+                                <div class="s2-bar-fill" style="width: 20%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="desc-panel">
+                <div class="desc-header">
+                    <span class="step-tag">Step 2. VOC Insights</span>
+                    <h2>고객 피드백 정제 및 마케팅 소구점 추출</h2>
+                    <p>자영업자 또는 브랜드 매니저들이 가장 번거로워하는 엑셀 정성 정량 리뷰 처리를 자동화합니다. 텍스트 열과 별점 평점 열을 오토 디텍션하여 소비자 행동 패턴을 요약합니다.
+                    </p>
+                    <ul class="feature-bullets">
+                        <li><strong>구조화 통계 렌더링</strong>: 판다스 데이터 클렌징을 통한 평점 가중 분포도 제작</li>
+                        <li><strong>불만 및 니즈 카테고리화</strong>: LLM이 원인과 중요도를 정밀 라벨링</li>
+                        <li><strong>클릭 앤 카피 원스톱 연동</strong>: 추천 소구점을 클릭하는 것만으로 3단계 작문 엔진의 메인 타겟으로 자동 주입 처리</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h6>구동 웹 기술 및 API</h6>
+                    <div class="tech-row">
+                        <span class="tech-tag">voc_analyzer.py (Pandas)</span>
+                        <span class="tech-tag">POST /api/analyze-voc</span>
+                        <span class="tech-tag">POST /api/upload-voc</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. COPYWRITER -->
+        <section id="tab-generator" class="screen-section">
+            <div class="mockup-container" style="justify-content: flex-start; gap: 0.8rem;">
+                <div class="mockup-header">
+                    <span class="dot-red"></span>
+                    <span class="dot-yellow"></span>
+                    <span class="dot-green"></span>
+                    <span class="mockup-title">cenciel-ai.com/generator (3단계 카피 생성 에디터)</span>
+                </div>
+                <div class="s3-preview">
+                    <div class="s3-phone">
+                        <span
+                            style="font-size:0.5rem; color:#fff; display:block; margin-bottom:4px;">Cenciel_Official</span>
+                        <div class="s3-phone-screen">
+                            <span style="font-size:0.58rem; color:var(--primary); font-weight:800;">Slide 1.
+                                Title</span>
+                            <div style="font-size:0.75rem; color:#fff; font-weight:700; margin:5px 0;">민감성 피부 시술 후 자극 커버
+                                끝</div>
+                            <span style="font-size:0.55rem; color:var(--text-secondary);">하루 종일 맑은 톤을 보정합니다.</span>
+                        </div>
+                        <div style="display:flex; justify-content:center; gap:2.5px; margin-top:4px;">
+                            <span style="width:3px; height:3px; background:var(--primary); border-radius:50%;"></span>
+                            <span
+                                style="width:3px; height:3px; background:rgba(255,255,255,0.2); border-radius:50%;"></span>
+                            <span
+                                style="width:3px; height:3px; background:rgba(255,255,255,0.2); border-radius:50%;"></span>
+                        </div>
+                    </div>
+                    <div class="s3-slide-editor">
+                        <span style="font-size:0.6rem; color:var(--text-secondary); text-transform:uppercase;">스토리 슬라이드
+                            구성안</span>
+                        <div class="s3-slide-item active">
+                            <strong>1. 표지 타이틀</strong>
+                            <p style="font-size:0.58rem; color:var(--text-muted);">메이크업 전 밀림 없는 비비크림</p>
+                        </div>
+                        <div class="s3-slide-item">
+                            <strong>2. 장점 1탄</strong>
+                            <p style="font-size:0.58rem; color:var(--text-muted);">성분의 재생성과 발림 효과</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="desc-panel">
+                <div class="desc-header">
+                    <span class="step-tag">Step 3. Copywriter</span>
+                    <h2>멀티 플랫폼 타겟 카피라이팅 &amp; 폰 인덱스 캡션</h2>
+                    <p>2단계에서 이식된 소구점 문장을 가이드 삼아, 소셜 미디어 플랫폼별 최적의 페르소나 톤앤매너 프롬프트를 배정하여 포스팅용 실물 원고를 제작합니다.</p>
+                    <ul class="feature-bullets">
+                        <li><strong>인스타그램 뷰어</strong>: 카드뉴스 각 슬라이드 구조와 인스타 전용 해시태그/이모지 배출</li>
+                        <li><strong>네이버 블로그 에디팅</strong>: SEO 최적 키워드 기반 상세 타이틀 및 소제목 문장 세트 추출</li>
+                        <li><strong>숏폼 비디오 가이드</strong>: 크리에이터 카메라 무빙 아이디어(Visual)와 스피치 성우 가이드(Audio) 지원</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h6>구동 웹 기술 및 API</h6>
+                    <div class="tech-row">
+                        <span class="tech-tag">LLMService.generate_marketing_content</span>
+                        <span class="tech-tag">Clipboard API (Clipboard JS)</span>
+                        <span class="tech-tag">POST /api/generate-content</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="back-btn-container">
+            <button class="btn-dash" onclick="window.history.back()">
+                <svg style="width:16px;height:16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                뒤로 가기
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tab sections
+            document.querySelectorAll('.screen-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            // Update active state on button
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show targets
+            document.getElementById(tabId).classList.add('active');
+
+            // Set active class on corresponding button
+            const triggerIdx = {
+                'tab-overview': 0,
+                'tab-market': 1,
+                'tab-voc': 2,
+                'tab-generator': 3
+            }[tabId];
+            document.querySelectorAll('.menu-btn')[triggerIdx].classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
