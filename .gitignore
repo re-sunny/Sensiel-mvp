@@ -31,3 +31,7 @@ build/
 *.ntvs*
 *.njsproj
 *.sln
+
+# Screenshot generation scripts
+capture_real_screenshots.py
+create_mock_screenshots.py
