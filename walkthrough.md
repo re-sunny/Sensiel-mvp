@@ -12,7 +12,6 @@
 
 ### 🖼️ 대시보드 메인 레이아웃 (Overview)
 ![대시보드 메인 화면](./static/images/01_overview.png)
-> **💡 이미지 추가 가이드**: 로컬 서버(`uvicorn main:app`)를 켜고 첫 페이지를 캡처하여 `static/images/01_overview.png`로 저장하면, 깃허브 업로드 시 위 자리에 실제 캡처 이미지가 자동으로 나타납니다.
 
 ```html
 <!-- 파이프라인 진행 상태를 도식화한 HTML 시각화 구조안 -->
@@ -52,7 +51,6 @@
 
 ### 🖼️ 1단계 구동 화면 (Market Radar)
 ![1단계 마켓 레이더](./static/images/02_market_radar.png)
-> **💡 이미지 추가 가이드**: 입력란에 "비비크림"을 기입하고 분석이 끝난 마켓 레이더 대시보드를 캡처해 `static/images/02_market_radar.png`로 저장하세요.
 
 ```html
 <!-- 1단계 입력 화면 예시 -->
@@ -84,7 +82,6 @@
 
 ### 🖼️ 2단계 구동 화면 (VOC Insights)
 ![2단계 VOC 피드백 분석](./static/images/03_voc_insights.png)
-> **💡 이미지 추가 가이드**: 리뷰 파일을 드래그해서 통계 차트와 카테고리 태그들이 생성된 화면을 캡처한 뒤 `static/images/03_voc_insights.png`로 저장하세요.
 
 ```html
 <!-- 2단계 VOC 결과물 렌더링 목업 -->
@@ -124,7 +121,6 @@
 
 ### 🖼️ 3단계 구동 화면 (Copywriter)
 ![3단계 멀티 카피라이팅](./static/images/04_copywriter.png)
-> **💡 이미지 추가 가이드**: 생성된 SNS 카드뉴스 포맷과 우측 본고 텍스트 에디팅 화면을 캡처한 뒤 `static/images/04_copywriter.png`로 저장하세요.
 
 ```html
 <!-- 3단계 결과 브라우저 및 카드뉴스 목업 -->
